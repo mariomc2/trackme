@@ -16,3 +16,11 @@
 </table>
 
 <%= button_tag("Location", :onclick => "myLocation()") %>
+
+<br>
+
+<div id='trackmap'></div>
+
+<%= javascript_tag do %>
+	var map = L.map('trackmap');
+<% end %>

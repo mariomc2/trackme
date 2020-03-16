@@ -1,5 +1,26 @@
 console.log("Location JS loaded");
 
+$( document ).on('turbolinks:load', function() {
+  
+  var tile_layer = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+  	attribution = 'Map data: &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors | &copy; TrackMe!',
+  	maxZoom = 19;
+
+  L.tileLayer(tile_layer, {attribution, maxZoom}).addTo(map);
+  map.options.scrollWheelZoom = 'center';
+  map.options.doubleClickZoom = 'center';
+
+  var legend = L.control({position: 'bottomright'});
+  legend.onAdd = function (map) {
+    var div = L.DomUtil.create('div', 'info legend leaflet-control-attribution');
+    div.innerHTML = "<div id='legend'>-</div>";
+    return div;
+  };
+  legend.addTo(map);
+
+  map.setView([0, 0], 0);
+})
+
 
 window.myLocation = function(){
 	if(navigator.geolocation) {
@@ -11,6 +32,7 @@ window.myLocation = function(){
         //$('#lng').textContent = nav_lng;
         document.getElementById('lat').textContent = nav_lat;
         document.getElementById('lng').textContent = nav_lng;
+        map.setView([nav_lat, nav_lng], 15);
       });
     }
 }

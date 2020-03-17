@@ -7,34 +7,29 @@ $( document ).on('turbolinks:load', function() {
   	maxZoom = 19;
 
   L.tileLayer(tile_layer, {attribution, maxZoom}).addTo(map);
-  map.options.scrollWheelZoom = 'center';
-  map.options.doubleClickZoom = 'center';
+  map.options.scrollWheelZoom = true;
+  map.options.doubleClickZoom = true;
 
-  var legend = L.control({position: 'bottomright'});
-  legend.onAdd = function (map) {
-    var div = L.DomUtil.create('div', 'info legend leaflet-control-attribution');
-    div.innerHTML = "<div id='legend'>-</div>";
-    return div;
-  };
-  legend.addTo(map);
-
-  map.setView([0, 0], 0);
+  if(navigator.geolocation)
+  	myLocation();
+  else
+  	map.setView([0, 0], 2);
 })
 
 
 window.myLocation = function(){
 	if(navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(function (position) {
-        const nav_lat = position.coords.latitude,
-            nav_lng = position.coords.longitude;
-        console.log("(Lat - Lng): " + convertDMS(nav_lat, nav_lng));
-        //$('#lat').textContent = nav_lat;
-        //$('#lng').textContent = nav_lng;
-        document.getElementById('lat').textContent = nav_lat;
-        document.getElementById('lng').textContent = nav_lng;
-        map.setView([nav_lat, nav_lng], 15);
-      });
-    }
+    navigator.geolocation.getCurrentPosition(function (position) {
+      const nav_lat = position.coords.latitude,
+          nav_lng = position.coords.longitude;
+
+      console.log("(Lat - Lng): " + convertDMS(nav_lat, nav_lng));
+      document.getElementById('latlng').textContent = convertDMS(nav_lat, nav_lng);
+
+      map.setView([nav_lat, nav_lng], map.getZoom() ? map.getZoom() : 15);
+      marker.setLatLng([nav_lat, nav_lng]);
+    });
+  }
 }
 
 function convertDMS( lat, lng ) {
@@ -53,5 +48,5 @@ function convertDMS( lat, lng ) {
   LngSeg = Math.round(100*(LngSeg - (LngMin * 60)))/100;
   var LngCardinal = ((lng > 0) ? "E" : "W");
    
-  return LatDeg + 'º' + LatMin + '′' + LatSeg + '″' + LatCardinal   + " " + LngDeg + 'º' + LngMin + '′' + LngSeg + '″' + LngCardinal;
+  return LatDeg + 'º ' + LatMin + '′ ' + LatSeg + '″' + LatCardinal   + "  -  " + LngDeg + 'º ' + LngMin + '′ ' + LngSeg + '″' + LngCardinal;
 }

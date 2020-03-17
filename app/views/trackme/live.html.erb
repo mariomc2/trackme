@@ -1,19 +1,8 @@
 <h1>Live Tracking</h1>
 
-<table>
-	<tbody>
-		<tr>
-			<th>Latitude</th>
-			<td><span id="lat">0</span> </td>
-		</tr>
-
-		<tr>
-			<th>Longitude</th>
-			<td><span id="lng">0</span> </td>
-		</tr>
-
-	</tbody>
-</table>
+<div>
+	<span id="latlng">0 0</span>
+</div>
 
 <%= button_tag("Location", :onclick => "myLocation()") %>
 
@@ -23,4 +12,5 @@
 
 <%= javascript_tag do %>
 	var map = L.map('trackmap');
+	var marker = L.circleMarker([0, 0]).addTo(map);
 <% end %>

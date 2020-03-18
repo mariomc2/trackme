@@ -1,5 +1,8 @@
 console.log("Location JS loaded");
 
+var id;
+
+// Set location when the page loads
 $( document ).on('turbolinks:load', function() {
   
   var tile_layer = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -11,27 +14,42 @@ $( document ).on('turbolinks:load', function() {
   map.options.doubleClickZoom = true;
 
   if(navigator.geolocation)
-  	myLocation();
+  	navigator.geolocation.getCurrentPosition(myLocation);
   else
   	map.setView([0, 0], 2);
 })
 
-
-window.myLocation = function(){
-	if(navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(function (position) {
-      const nav_lat = position.coords.latitude,
-          nav_lng = position.coords.longitude;
-
-      console.log("(Lat - Lng): " + convertDMS(nav_lat, nav_lng));
-      document.getElementById('latlng').textContent = convertDMS(nav_lat, nav_lng);
-
-      map.setView([nav_lat, nav_lng], map.getZoom() ? map.getZoom() : 15);
-      marker.setLatLng([nav_lat, nav_lng]);
-    });
+// Toggle Live Tracking
+window.liveTrack = function(){
+  var checkbox = document.getElementById('liveTrack');
+  if (checkbox.checked == true){
+    console.log('Live tracking started');
+    options = {
+      enableHighAccuracy: false,
+      timeout: 5000,
+      maximumAge: 0
+    };
+    id = navigator.geolocation.watchPosition(myLocation, error, options);
+  }
+  else{
+    console.log('Live tracking stopped');
+    navigator.geolocation.clearWatch(id);
   }
 }
 
+// Update the Map and marker
+myLocation = function(position){
+  const nav_lat = position.coords.latitude,
+      nav_lng = position.coords.longitude;
+
+  console.log("(Lat - Lng): " + convertDMS(nav_lat, nav_lng));
+  document.getElementById('latlng').textContent = convertDMS(nav_lat, nav_lng);
+
+  map.setView([nav_lat, nav_lng], map.getZoom() ? map.getZoom() : 15);
+  marker.setLatLng([nav_lat, nav_lng]);    
+}
+
+// Format the coordinates
 function convertDMS( lat, lng ) {
  
   var convertLat = Math.abs(lat);
@@ -49,4 +67,9 @@ function convertDMS( lat, lng ) {
   var LngCardinal = ((lng > 0) ? "E" : "W");
    
   return LatDeg + 'º ' + LatMin + '′ ' + LatSeg + '″' + LatCardinal   + "  -  " + LngDeg + 'º ' + LngMin + '′ ' + LngSeg + '″' + LngCardinal;
+}
+
+// Log any error form live tracking
+function error(err) {
+  console.warn('ERROR(' + err.code + '): ' + err.message);
 }

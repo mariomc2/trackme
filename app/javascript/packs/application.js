@@ -18,3 +18,5 @@ require("channels")
 import 'leaflet'
 
 require("packs/location")
+
+Notification.requestPermission().then(function (result) {})

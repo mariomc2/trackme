@@ -1,6 +1,6 @@
 console.log("Location JS loaded");
 
-var id;
+var watchPositionID, setIntervalID;
 
 // Set location when the page loads
 $( document ).on('turbolinks:load', function() {
@@ -29,11 +29,13 @@ window.liveTrack = function(){
       timeout: 5000,
       maximumAge: 0
     };
-    id = navigator.geolocation.watchPosition(myLocation, error, options);
+    watchPositionID = navigator.geolocation.watchPosition(myLocation, error, options);
+    setIntervalID = setInterval(sendLocation, 3000);
   }
   else{
     console.log('Live tracking stopped');
-    navigator.geolocation.clearWatch(id);
+    clearInterval(setIntervalID);
+    navigator.geolocation.clearWatch(watchPositionID);
   }
 }
 
@@ -47,6 +49,17 @@ myLocation = function(position){
 
   map.setView([nav_lat, nav_lng], map.getZoom() ? map.getZoom() : 15);
   marker.setLatLng([nav_lat, nav_lng]);    
+}
+
+// Send location to Server
+sendLocation = function(){
+  navigator.geolocation.getCurrentPosition(function(position){
+    latlng.send_location(position.coords.latitude, position.coords.longitude);
+    const num = Number(document.getElementById('db_log').textContent) + 1;
+    document.getElementById('db_log').textContent = num;
+    console.log('Send location to DataBase # ' + num);
+  });
+  
 }
 
 // Format the coordinates

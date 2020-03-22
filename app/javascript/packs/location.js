@@ -1,6 +1,7 @@
 console.log("Location JS loaded");
 
-var watchPositionID, setIntervalID;
+var setIntervalID;
+var lastLocation = { latitude: 0, longitude: 0};
 
 // Set location when the page loads
 $( document ).on('turbolinks:load', function() {
@@ -24,18 +25,11 @@ window.liveTrack = function(){
   var checkbox = document.getElementById('liveTrack');
   if (checkbox.checked == true){
     console.log('Live tracking started');
-    options = {
-      enableHighAccuracy: false,
-      timeout: 5000,
-      maximumAge: 0
-    };
-    watchPositionID = navigator.geolocation.watchPosition(myLocation, error, options);
-    setIntervalID = setInterval(sendLocation, 3000);
+    setIntervalID = setInterval(sendLocation, 1000);
   }
   else{
     console.log('Live tracking stopped');
     clearInterval(setIntervalID);
-    navigator.geolocation.clearWatch(watchPositionID);
   }
 }
 
@@ -44,7 +38,7 @@ myLocation = function(position){
   const nav_lat = position.coords.latitude,
       nav_lng = position.coords.longitude;
 
-  console.log("(Lat - Lng): " + convertDMS(nav_lat, nav_lng));
+  console.log("Map to (Lat - Lng): " + convertDMS(nav_lat, nav_lng));
   document.getElementById('latlng').textContent = convertDMS(nav_lat, nav_lng);
 
   map.setView([nav_lat, nav_lng], map.getZoom() ? map.getZoom() : 15);
@@ -54,10 +48,22 @@ myLocation = function(position){
 // Send location to Server
 sendLocation = function(){
   navigator.geolocation.getCurrentPosition(function(position){
-    latlng.send_location(position.coords.latitude, position.coords.longitude);
-    const num = Number(document.getElementById('db_log').textContent) + 1;
-    document.getElementById('db_log').textContent = num;
-    console.log('Send location to DataBase # ' + num);
+
+    // Update the Map
+    myLocation(position)
+
+    if (distance(lastLocation, position.coords) > 5){
+      // Send location to Server 
+      const nav_lat = position.coords.latitude,
+        nav_lng = position.coords.longitude;
+      
+      latlng.send_location(nav_lat, nav_lng);
+      lastLocation = position.coords;
+      // Update counter in Page 
+      const num = Number(document.getElementById('db_log').textContent) + 1;
+      document.getElementById('db_log').textContent = num;
+      console.log('Send location to DataBase # ' + num + ': ' + convertDMS(nav_lat, nav_lng));
+    }
   });
   
 }
@@ -80,6 +86,32 @@ function convertDMS( lat, lng ) {
   var LngCardinal = ((lng > 0) ? "E" : "W");
    
   return LatDeg + 'º ' + LatMin + '′ ' + LatSeg + '″' + LatCardinal   + "  -  " + LngDeg + 'º ' + LngMin + '′ ' + LngSeg + '″' + LngCardinal;
+}
+
+// Haversine formula
+function distance(p1, p2) {
+  if ((p1.latitude == p2.latitude) && (p1.longitude == p2.longitude)) {
+    return 0;
+  }
+  else {
+
+    function deg2rad(deg){return deg * (Math.PI/180)};
+
+    // The radius of the planet earth in meters
+    let R = 6378137;
+    let dLat = deg2rad(p2.latitude - p1.latitude)
+    let dLng = deg2rad(p2.longitude - p1.longitude)
+
+    let a = Math.sin(dLat / 2) ** 2 +
+            Math.cos(deg2rad(p1.latitude)) * 
+            Math.cos(deg2rad(p2.latitude)) *
+            Math.sin(dLng / 2) ** 2;
+
+    let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    let distance = R * c;
+
+    return distance;
+  }
 }
 
 // Log any error form live tracking

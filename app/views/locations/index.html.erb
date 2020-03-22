@@ -2,6 +2,10 @@
 
 <h1>Locations</h1>
 
+<div id="<%= @locations.exists? ? 'trackmap' : ''%>"></div>
+
+<br>
+<div>
 <table>
   <thead>
     <tr>
@@ -27,8 +31,28 @@
     <% end %>
   </tbody>
 </table>
+</div>
 
 <br>
 
 <%= link_to 'New Location', new_run_location_path %> |
 <%= link_to 'Show Run', @run %>
+
+<%= javascript_tag do %>
+  <% if @locations.exists? %>
+    var map = L.map('trackmap');
+    L.circle([<%= @locations.first.latitude %>, <%= @locations.first.longitude%>],
+          {radius: 3, color: 'Green'}).addTo(map);
+    L.circle([<%= @locations.last.latitude %>, <%= @locations.last.longitude%>],
+          {radius: 3, color: 'DarkRed'}).addTo(map);
+
+    var latlngs = [
+    <% @locations.each do |location| %>
+      [<%= location.latitude %>, <%= location.longitude%>],
+    <% end %>
+    ];
+    var polyline = L.polyline(latlngs, {weight: 5, color: 'RoyalBlue'}).addTo(map);
+    // zoom the map to the polyline
+    map.fitBounds(polyline.getBounds());
+  <% end %>
+<% end %>

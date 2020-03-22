@@ -22,3 +22,6 @@ Things you may want to cover:
 * Deployment instructions
 
 * ...
+
+rails generate scaffold Run title:string distance:float duration:float started_at:datetime ended_at:datetime note:text
+rails generate scaffold Location logged_at:datetime latitude:float longitude:float run:belongs_to

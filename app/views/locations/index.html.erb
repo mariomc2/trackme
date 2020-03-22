@@ -1,0 +1,34 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Locations</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Logged at</th>
+      <th>Latitude</th>
+      <th>Longitude</th>
+      <th>Run</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @locations.each do |location| %>
+      <tr>
+        <td><%= location.logged_at %></td>
+        <td><%= location.latitude %></td>
+        <td><%= location.longitude %></td>
+        <td><%= location.run_id %></td>
+        <td><%= link_to 'Show', run_location_path(@run,location) %></td>
+        <td><%= link_to 'Edit', edit_run_location_path(@run,location) %></td>
+        <td><%= link_to 'Destroy', run_location_path(@run, location), method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Location', new_run_location_path %> |
+<%= link_to 'Show Run', @run %>

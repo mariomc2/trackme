@@ -1,7 +1,7 @@
 console.log("Location JS loaded");
 
 var setIntervalID;
-var lastLocation = { latitude: 0, longitude: 0};
+var lastLocation;
 
 // Set location when the page loads
 $( document ).on('turbolinks:load', function() {
@@ -25,6 +25,7 @@ window.liveTrack = function(){
   var checkbox = document.getElementById('liveTrack');
   if (checkbox.checked == true){
     console.log('Live tracking started');
+    lastLocation = { latitude: 0, longitude: 0}
     setIntervalID = setInterval(sendLocation, 1000);
   }
   else{
@@ -57,7 +58,7 @@ sendLocation = function(){
       const nav_lat = position.coords.latitude,
         nav_lng = position.coords.longitude;
       
-      latlng.send_location(nav_lat, nav_lng);
+      latlng.send_location(Date(), nav_lat, nav_lng);
       lastLocation = position.coords;
       // Update counter in Page 
       const num = Number(document.getElementById('db_log').textContent) + 1;

@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Logged at:</strong>
+  <%= @location.logged_at %>
+</p>
+
+<p>
+  <strong>Latitude:</strong>
+  <%= @location.latitude %>
+</p>
+
+<p>
+  <strong>Longitude:</strong>
+  <%= @location.longitude %>
+</p>
+
+<p>
+  <strong>Run:</strong>
+  <%= @location.run_id %>
+</p>
+
+<%= link_to 'Edit', edit_run_location_path(@run,@location) %> |
+<%= link_to 'Back', run_locations_path %>

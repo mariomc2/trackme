@@ -1,5 +1,9 @@
 Rails.application.routes.draw do
 
+  
+  resources :runs do
+  	resources :locations
+  end
 	root 'trackme#live'
 
   get 'trackme/live'

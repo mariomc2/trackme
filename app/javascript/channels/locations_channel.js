@@ -15,7 +15,7 @@ window.latlng = consumer.subscriptions.create("LocationsChannel", {
     // Called when there's incoming data on the websocket for this channel
   },
 
-  send_location(lat, lng){
-    this.perform("send_location", { lat: lat, lng: lng })
+  send_location(currentTime, lat, lng){
+    this.perform("send_location", { currentTime: currentTime, lat: lat, lng: lng })
   }
 });

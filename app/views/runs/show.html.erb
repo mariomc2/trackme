@@ -1,0 +1,39 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Title:</strong>
+  <%= @run.title %>
+</p>
+
+<p>
+  <strong>Distance:</strong>
+  <%= @run.distance %>
+</p>
+
+<p>
+  <strong>Duration:</strong>
+  <%= @run.duration %>
+</p>
+
+<p>
+  <strong>Started at:</strong>
+  <%= @run.started_at %>
+</p>
+
+<p>
+  <strong>Ended at:</strong>
+  <%= @run.ended_at %>
+</p>
+
+<p>
+  <strong>Note:</strong>
+  <%= @run.note %>
+</p>
+
+<p>
+  <strong>Locations:</strong>
+  <%= link_to 'Locations', run_locations_path(@run) %>
+</p>
+
+<%= link_to 'Edit', edit_run_path(@run) %> |
+<%= link_to 'Back', runs_path %>

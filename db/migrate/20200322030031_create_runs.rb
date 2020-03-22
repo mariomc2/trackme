@@ -5,8 +5,10 @@ class CreateRuns < ActiveRecord::Migration[6.0]
       t.float :distance
       t.float :duration
       t.datetime :started_at
-      t.datetime :ended_at
+      t.datetime :ended_at, :null => true
       t.text :note
+      t.boolean :finished, :default => false
+      t.boolean :paused, :default => false
 
       t.timestamps
     end

@@ -29,6 +29,8 @@ ActiveRecord::Schema.define(version: 2020_03_22_030420) do
     t.datetime "started_at"
     t.datetime "ended_at"
     t.text "note"
+    t.boolean "finished", default: false
+    t.boolean "paused", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

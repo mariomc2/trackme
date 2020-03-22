@@ -69,6 +69,6 @@ class RunsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def run_params
-      params.require(:run).permit(:title, :distance, :duration, :started_at, :ended_at, :note)
+      params.require(:run).permit(:title, :distance, :duration, :started_at, :ended_at, :note, :finished, :paused)
     end
 end

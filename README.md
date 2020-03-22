@@ -23,5 +23,7 @@ Things you may want to cover:
 
 * ...
 
-rails generate scaffold Run title:string distance:float duration:float started_at:datetime ended_at:datetime note:text
+rails generate scaffold Run title:string distance:float duration:float started_at:datetime ended_at:datetime note:text finished:boolean paused:boolean
 rails generate scaffold Location logged_at:datetime latitude:float longitude:float run:belongs_to
+
+heroku run rails db:migrate --app aca

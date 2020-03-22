@@ -10,6 +10,8 @@
       <th>Duration</th>
       <th>Started at</th>
       <th>Ended at</th>
+      <th>Finished</th>
+      <th>Paused</th>
       <th>Note</th>
       <th colspan="3"></th>
     </tr>
@@ -23,6 +25,8 @@
         <td><%= run.duration %></td>
         <td><%= run.started_at %></td>
         <td><%= run.ended_at %></td>
+        <td><%= run.finished %></td>
+        <td><%= run.paused %></td>
         <td><%= run.note %></td>
         <td><%= link_to 'Show', run %></td>
         <td><%= link_to 'Edit', edit_run_path(run) %></td>

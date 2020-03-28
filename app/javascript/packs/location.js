@@ -15,7 +15,8 @@ $( document ).on('turbolinks:load', function() {
   map.options.doubleClickZoom = true;
 
   if(navigator.geolocation)
-  	navigator.geolocation.getCurrentPosition(myLocation);
+    var a = 0;
+  	//navigator.geolocation.getCurrentPosition(myLocation);
   else
   	map.setView([0, 0], 2);
 })

@@ -8,6 +8,7 @@ class LocationsChannel < ApplicationCable::Channel
   end
 
   def send_location(data)
-  	puts data
+  	puts data.slice("logged_at", "latitude", "longitude", "run_id")
+  	# Location.create(data.slice("logged_at", "latitude", "longitude", "run_id"))
   end
 end

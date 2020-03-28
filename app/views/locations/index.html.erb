@@ -2,7 +2,13 @@
 
 <h1>Locations</h1>
 
-<div id="<%= @locations.exists? ? 'trackmap' : ''%>"></div>
+<div id="<%= @locations.exists? ? 'trackmap2' : ''%>"></div>
+
+<%= content_tag "div", 
+  @locations.exists? ? 
+  {id: 'trackmap', data: {locations: @locations.select('latitude','longitude')}} : 
+  '' do %>
+<% end %>
 
 <br>
 <div>
@@ -46,11 +52,9 @@
     L.circle([<%= @locations.last.latitude %>, <%= @locations.last.longitude%>],
           {radius: 3, color: 'DarkRed'}).addTo(map);
 
-    var latlngs = [
-    <% @locations.each do |location| %>
-      [<%= location.latitude %>, <%= location.longitude%>],
-    <% end %>
-    ];
+    var latlngs = JSON.parse(document.getElementById('trackmap').dataset.locations).map(c => [c.latitude, c.longitude])
+    
+    map.setView([0, 0], 15);
     var polyline = L.polyline(latlngs, {weight: 5, color: 'RoyalBlue'}).addTo(map);
     // zoom the map to the polyline
     map.fitBounds(polyline.getBounds());

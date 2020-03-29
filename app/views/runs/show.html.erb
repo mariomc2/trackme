@@ -1,49 +1,36 @@
-<p id="notice"><%= notice %></p>
 
-<p>
-  <strong>Title:</strong>
-  <%= @run.title %>
-</p>
+<%= link_to runs_path do %>
+    <i class="fas fa-arrow-circle-left fa-3x mx-2 text-secondary"></i>
+<% end %>
 
-<p>
-  <strong>Distance:</strong>
-  <%= @run.distance %>
-</p>
+<%= render 'mapCard', run: @run %>
 
-<p>
-  <strong>Duration:</strong>
-  <%= @run.duration %>
-</p>
-
-<p>
-  <strong>Started at:</strong>
-  <%= @run.started_at %>
-</p>
-
-<p>
-  <strong>Ended at:</strong>
-  <%= @run.ended_at %>
-</p>
-
-<p>
-  <strong>Finished:</strong>
-  <%= @run.finished %>
-</p>
-
-<p>
-  <strong>Paused:</strong>
-  <%= @run.paused %>
-</p>
-
-<p>
-  <strong>Note:</strong>
-  <%= @run.note %>
-</p>
-
-<p>
-  <strong>Locations:</strong>
-  <%= link_to 'Locations', run_locations_path(@run) %>
-</p>
-
-<%= link_to 'Edit', edit_run_path(@run) %> |
-<%= link_to 'Back', runs_path %>
+<div class="card border-primary mb-3" >
+  <div class="card-header border-primary text-primary ">
+    <div >      
+      <h4>More Info</h4>
+    </div>
+  </div>
+  <div class="card-body">
+    <h5>Activity Hours:</h5>
+    <p><%= @run.started_at.strftime("%l:%M %P") %> to <%= @run.ended_at.strftime("%l:%M %P") %> </p>
+    <h5>Notes:</h5>
+    <p><%= distance_of_time_in_words(@run.started_at, @run.ended_at) %></p>
+    <p><%= @run.note %></p>
+  </div>
+  <div class="card-footer bg-transparent border-primary">
+    <table class="table table-borderless text-center ">
+      <thead></thead>
+      <tbody>        
+        <tr>
+          <td>
+            <%= link_to  "Edit", edit_run_path(@run), class: "btn btn-lg btn-warning " %>
+          </td>
+          <td>
+            <%= link_to  "Delete", @run, method: :delete, data: { confirm: 'Are you sure?' } , class: "btn btn-lg btn-danger " %>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

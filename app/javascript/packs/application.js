@@ -18,6 +18,7 @@ require("channels")
 import 'bootstrap'
 import 'leaflet'
 import '../stylesheets/application'
+import "@fortawesome/fontawesome-free/js/all";
 
 require("packs/location")
 

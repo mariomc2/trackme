@@ -4,8 +4,8 @@ var setIntervalID;
 var lastLocation;
 
 // Set location when the page loads
-$( document ).on('turbolinks:load', function() {
-  
+//$( document ).on('turbolinks:load', function() {
+nada = function() { 
   var tile_layer = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
   	attribution = 'Map data: &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors | &copy; TrackMe!',
   	maxZoom = 19;
@@ -19,7 +19,7 @@ $( document ).on('turbolinks:load', function() {
   	//navigator.geolocation.getCurrentPosition(myLocation);
   else
   	map.setView([0, 0], 2);
-})
+}
 
 // Toggle Live Tracking
 window.liveTrack = function(){
@@ -114,6 +114,26 @@ function distance(p1, p2) {
 
     return distance;
   }
+}
+
+// Initialize Map
+window.iniRunMap = function(map, latlng){
+
+  var tile_layer = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    attribution = 'Map data: &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors | &copy; TrackMe!',
+    maxZoom = 19;
+
+  L.tileLayer(tile_layer, {attribution, maxZoom}).addTo(map);
+  map.options.scrollWheelZoom = true;
+  map.options.doubleClickZoom = true;
+
+  var polyline = L.polyline(latlngs, {weight: 5, color: 'RoyalBlue'}).addTo(map);
+  // zoom the map to the polyline
+  map.fitBounds(polyline.getBounds());
+
+  L.circle(latlngs[0], {radius: 3, color: 'Green'}).addTo(map);
+  L.circle(latlngs.slice(-1)[0], {radius: 3, color: 'DarkRed'}).addTo(map);
+
 }
 
 // Log any error form live tracking

@@ -9,6 +9,7 @@ class CreateRuns < ActiveRecord::Migration[6.0]
       t.text :note
       t.boolean :finished, :default => false
       t.boolean :paused, :default => false
+      t.belongs_to :user, null: false, foreign_key: true
 
       t.timestamps
     end

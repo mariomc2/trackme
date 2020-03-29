@@ -1,10 +1,11 @@
 class RunsController < ApplicationController
   before_action :set_run, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!
 
   # GET /runs
   # GET /runs.json
   def index
-    @runs = Run.all
+    @runs = current_user.runs
   end
 
   # GET /runs/1
@@ -25,7 +26,7 @@ class RunsController < ApplicationController
   # POST /runs.json
   def create
     @run = Run.new(run_params)
-
+    @run.user = current_user
     respond_to do |format|
       if @run.save
         format.html { redirect_to @run, notice: 'Run was successfully created.' }

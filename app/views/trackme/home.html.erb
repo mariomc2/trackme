@@ -1,0 +1,7 @@
+<% if current_user %> 
+
+	<%= link_to  "Historic Runs", runs_path, class: "btn btn-lg btn-primary btn-block" %>
+	
+<% else %>
+	<h3> Please Sign In</h3>
+<% end %>

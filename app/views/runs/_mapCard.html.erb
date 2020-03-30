@@ -4,7 +4,7 @@
       <i class="fas fa-running fa-3x mx-2" style="float:left;"></i>
       <div>
         <h4><%= run.title %></h4>
-        <%= run.started_at.strftime("%A, %e %B %Y - %l:%M %P") %>
+        <%= run.started_at ? run.started_at.strftime("%A, %e %B %Y - %l:%M %P") : "No Starting Time" %>
       </div>
     </div>
   </div>

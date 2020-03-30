@@ -29,10 +29,10 @@ class RunsController < ApplicationController
     @run.user = current_user
     respond_to do |format|
       if @run.save
-        format.html { redirect_to @run, notice: 'Run was successfully created.' }
+        format.html { redirect_to root_path, notice: 'Run was successfully created.' }
         format.json { render :show, status: :created, location: @run }
       else
-        format.html { render :new }
+        format.html { redirect_to root_path }
         format.json { render json: @run.errors, status: :unprocessable_entity }
       end
     end
@@ -43,10 +43,10 @@ class RunsController < ApplicationController
   def update
     respond_to do |format|
       if @run.update(run_params)
-        format.html { redirect_to @run, notice: 'Run was successfully updated.' }
+        format.html { redirect_to root_path, notice: 'Run was successfully updated.' }
         format.json { render :show, status: :ok, location: @run }
       else
-        format.html { render :edit }
+        format.html { redirect_to root_path }
         format.json { render json: @run.errors, status: :unprocessable_entity }
       end
     end

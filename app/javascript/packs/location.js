@@ -21,55 +21,6 @@ nada = function() {
   	map.setView([0, 0], 2);
 }
 
-// Toggle Live Tracking
-window.liveTrack = function(){
-  var checkbox = document.getElementById('liveTrack');
-  if (checkbox.checked == true){
-    console.log('Live tracking started');
-    lastLocation = { latitude: 0, longitude: 0}
-    setIntervalID = setInterval(sendLocation, 1000);
-  }
-  else{
-    console.log('Live tracking stopped');
-    clearInterval(setIntervalID);
-  }
-}
-
-// Update the Map and marker
-myLocation = function(position){
-  const nav_lat = position.coords.latitude,
-      nav_lng = position.coords.longitude;
-
-  console.log("Map to (Lat - Lng): " + convertDMS(nav_lat, nav_lng));
-  document.getElementById('latlng').textContent = convertDMS(nav_lat, nav_lng);
-
-  map.setView([nav_lat, nav_lng], map.getZoom() ? map.getZoom() : 15);
-  marker.setLatLng([nav_lat, nav_lng]);    
-}
-
-// Send location to Server
-sendLocation = function(){
-  navigator.geolocation.getCurrentPosition(function(position){
-
-    // Update the Map
-    myLocation(position)
-
-    if (distance(lastLocation, position.coords) > 5){
-      // Send location to Server 
-      const nav_lat = position.coords.latitude,
-        nav_lng = position.coords.longitude;
-      
-      latlng.send_location(Date(), nav_lat, nav_lng);
-      lastLocation = position.coords;
-      // Update counter in Page 
-      const num = Number(document.getElementById('db_log').textContent) + 1;
-      document.getElementById('db_log').textContent = num;
-      console.log('Send location to DataBase # ' + num + ': ' + convertDMS(nav_lat, nav_lng));
-    }
-  });
-  
-}
-
 // Format the coordinates
 function convertDMS( lat, lng ) {
  
@@ -116,16 +67,10 @@ function distance(p1, p2) {
   }
 }
 
-// Initialize Map
+// Initialize Map for Historic runs
 window.iniRunMap = function(map, latlng){
 
-  var tile_layer = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-    attribution = 'Map data: &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors | &copy; TrackMe!',
-    maxZoom = 19;
-
-  L.tileLayer(tile_layer, {attribution, maxZoom}).addTo(map);
-  map.options.scrollWheelZoom = true;
-  map.options.doubleClickZoom = true;
+  iniMap(map);
 
   var polyline = L.polyline(latlngs, {weight: 5, color: 'RoyalBlue'}).addTo(map);
   // zoom the map to the polyline
@@ -135,6 +80,73 @@ window.iniRunMap = function(map, latlng){
   L.circle(latlngs.slice(-1)[0], {radius: 3, color: 'DarkRed'}).addTo(map);
 
 }
+
+window.liveTrack = function(map){
+
+  iniMap(map);
+
+  if(navigator.geolocation)    
+    navigator.geolocation.watchPosition(myLocation);
+  else
+    map.setView([0, 0], 2);
+}
+
+
+// Toggle Live Tracking
+window.runTrack = function(map){
+  
+  iniMap(map);
+  lastLocation = { latitude: 0, longitude: 0};
+
+  setIntervalID = setInterval(sendLocation, 1000);
+  
+}
+
+
+// Send location to Server
+sendLocation = function(){
+  navigator.geolocation.getCurrentPosition(function(position){
+
+    // Update the Map
+    myLocation(position)
+
+    if (distance(lastLocation, position.coords) > 5){
+      // Send location to Server 
+      const nav_lat = position.coords.latitude,
+        nav_lng = position.coords.longitude;
+      
+      latlng.send_location(Date(), nav_lat, nav_lng, run_id);
+      lastLocation = position.coords;
+      // Update counter in Page 
+      console.log('Send location to DataBase for Run ' + run_id + ': ' + convertDMS(nav_lat, nav_lng));
+    }
+  });
+}
+
+
+// Initialize Map
+iniMap = function(map){
+  var tile_layer = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    attribution = 'Map data: &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors | &copy; TrackMe!',
+    maxZoom = 19;
+
+  L.tileLayer(tile_layer, {attribution, maxZoom}).addTo(map);
+  map.options.scrollWheelZoom = true;
+  map.options.doubleClickZoom = true;
+}
+
+
+// Update the Map and marker
+myLocation = function(position){
+  const nav_lat = position.coords.latitude,
+      nav_lng = position.coords.longitude;
+
+  console.log("Map to (Lat - Lng): " + convertDMS(nav_lat, nav_lng));
+
+  map.setView([nav_lat, nav_lng], map.getZoom() ? map.getZoom() : 17);
+  marker.setLatLng([nav_lat, nav_lng]);    
+}
+
 
 // Log any error form live tracking
 function error(err) {

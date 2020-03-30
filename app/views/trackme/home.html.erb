@@ -1,7 +1,58 @@
 <% if current_user %> 
 
-	<%= link_to  "Historic Runs", runs_path, class: "btn btn-lg btn-primary btn-block" %>
+	<% if @run.new_record? %>
+		<div>
+			<%= simple_form_for(@run) do |f| %>
+				<%= f.input :title, :as => :hidden %>
+				<%= f.input :started_at, :as => :hidden%>
+				<%= link_to  "Start Activity", "", id: "start_btn", class: "btn btn-lg btn-warning btn-block", onclick: "start_btn(this);" %>
+			<% end %>
+			<br>
+			<%= link_to  "History of Activities", runs_path, id: "history_btn", class: "btn btn-lg btn-primary btn-block" %>
+			<br>
+			<div id='trackmap'></div>
+	
+			<%= javascript_tag do %>
+				var map = L.map('trackmap');
+				var marker = L.circleMarker([0, 0]).addTo(map);
+				liveTrack(map);
+
+				start_btn = function(form){
+					run_title.value = "Test Crear"
+			  	run_started_at.value = Date(Date.now());
+			  	new_run.submit();
+				}
+			<% end %>
+		</div>		
+	<% else %>
+		<div>
+			<h4> <%= @run.title %> - Activity in progess </h4>
+			<%= simple_form_for(@run) do |f| %>
+				<%= f.input :finished, :as => :hidden %>
+				<%= f.input :ended_at, :as => :hidden%>
+				<%= f.submit "Finish Activity", class: "btn btn-lg btn-danger btn-block", onclick: "finish_btn(this);"%>
+			<% end %>
+			<br>
+			<div id='trackmap'></div>
+
+			<%= javascript_tag do %>
+				var map = L.map('trackmap');
+				var marker = L.circleMarker([0, 0]).addTo(map);
+				var run_id = <%= @run.id %>;
+				runTrack(map);
+
+				finish_btn = function(form){
+					run_finished.value = true
+			  	run_ended_at.value = Date(Date.now());
+			  	new_run.submit();
+				}
+			<% end %>
+		</div>
+	<% end %>
+
+
 	
 <% else %>
 	<h3> Please Sign In</h3>
 <% end %>
+

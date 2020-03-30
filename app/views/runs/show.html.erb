@@ -13,9 +13,9 @@
   </div>
   <div class="card-body">
     <h5>Activity Hours:</h5>
-    <p><%= @run.started_at.strftime("%l:%M %P") %> to <%= @run.ended_at.strftime("%l:%M %P") %> </p>
+    <p><%= @run.started_at ? @run.started_at.strftime("%l:%M %P") : "No Starting Time"%> to <%= @run.ended_at ? @run.ended_at.strftime("%l:%M %P") : "No Finished Time" %> </p>
     <h5>Notes:</h5>
-    <p><%= distance_of_time_in_words(@run.started_at, @run.ended_at) %></p>
+    <p><%= (@run.started_at && @run.ended_at) ? distance_of_time_in_words(@run.started_at, @run.ended_at) : ""%></p>
     <p><%= @run.note %></p>
   </div>
   <div class="card-footer bg-transparent border-primary">

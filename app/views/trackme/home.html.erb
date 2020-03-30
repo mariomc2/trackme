@@ -47,6 +47,7 @@
 				var marker = L.circleMarker([0, 0]).addTo(map);
 				var run_id = <%= @run.id %>;
 				runTrack(map);
+				var gps_sens = <%= ENV['GPS_SENS'].to_i %>;
 
 				finish_btn = function(form){
 					run_finished.value = true

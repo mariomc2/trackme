@@ -116,7 +116,7 @@ sendLocation = function(){
     // Update the Map
     myLocation(position)
 
-    if (distance(lastLocation, position.coords) > 5){
+    if (distance(lastLocation, position.coords) > 1){
       // Send location to Server 
       const nav_lat = position.coords.latitude,
         nav_lng = position.coords.longitude;

@@ -92,11 +92,13 @@ window.liveTrack = function(map){
 }
 
 
-// Toggle Live Tracking
+// Start Run Tracking
 window.runTrack = function(map){
   
   iniMap(map);
-  lastLocation = { latitude: 0, longitude: 0};
+  navigator.geolocation.getCurrentPosition(function(position){
+    lastLocation = { latitude: position.coords.latitude, longitude: position.coords.longitude}
+  }); 
 
   setIntervalID = setInterval(sendLocation, 1000);
   
@@ -116,6 +118,10 @@ sendLocation = function(){
         nav_lng = position.coords.longitude;
       
       latlng.send_location(Date(), nav_lat, nav_lng, run_id);
+
+      L.polyline([[lastLocation.latitude,lastLocation.longitude],
+                  [nav_lat,nav_lng]], 
+        {weight: 5, color: 'RoyalBlue'}).addTo(map);
       lastLocation = position.coords;
       // Update counter in Page 
       console.log('Send location to DataBase for Run ' + run_id + ': ' + convertDMS(nav_lat, nav_lng));

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_28_225410) do
+ActiveRecord::Schema.define(version: 2020_03_22_030420) do
 
   create_table "locations", force: :cascade do |t|
     t.datetime "logged_at"

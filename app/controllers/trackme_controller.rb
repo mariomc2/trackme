@@ -4,9 +4,11 @@ class TrackmeController < ApplicationController
   end
 
   def home
-  	@run = current_user.runs.where(finished: false).order('started_at').last
-  	if !@run
-  		@run = Run.new
-  	end
+  	if current_user
+	  	@run = current_user.runs.where(finished: false).order('started_at').last
+	  	if !@run
+	  		@run = Run.new
+	  	end
+	  end
   end
 end

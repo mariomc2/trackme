@@ -102,7 +102,7 @@ window.runTrack = function(map){
   iniMap(map);
   navigator.geolocation.getCurrentPosition(function(position){
     lastLocation = { latitude: position.coords.latitude, longitude: position.coords.longitude}
-  }); 
+  }, error, geoOptions); 
 
   setIntervalID = setInterval(sendLocation, 1000);
   

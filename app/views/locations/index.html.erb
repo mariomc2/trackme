@@ -12,7 +12,7 @@
 
 <br>
 <div>
-<table>
+<table class="table table-striped">
   <thead>
     <tr>
       <th>Logged at</th>
@@ -47,16 +47,7 @@
 <%= javascript_tag do %>
   <% if @locations.exists? %>
     var map = L.map('trackmap');
-    L.circle([<%= @locations.first.latitude %>, <%= @locations.first.longitude%>],
-          {radius: 3, color: 'Green'}).addTo(map);
-    L.circle([<%= @locations.last.latitude %>, <%= @locations.last.longitude%>],
-          {radius: 3, color: 'DarkRed'}).addTo(map);
-
     var latlngs = JSON.parse(document.getElementById('trackmap').dataset.locations).map(c => [c.latitude, c.longitude])
-    
-    map.setView([0, 0], 15);
-    var polyline = L.polyline(latlngs, {weight: 5, color: 'RoyalBlue'}).addTo(map);
-    // zoom the map to the polyline
-    map.fitBounds(polyline.getBounds());
+    iniRunMap(map, latlngs);
   <% end %>
 <% end %>

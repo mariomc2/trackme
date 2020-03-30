@@ -3,6 +3,10 @@ console.log("Location JS loaded");
 var setIntervalID;
 var lastLocation;
 
+var geoOptions = {
+  enableHighAccuracy: true
+};
+
 // Set location when the page loads
 //$( document ).on('turbolinks:load', function() {
 nada = function() { 
@@ -128,7 +132,7 @@ sendLocation = function(){
       const num = Number(document.getElementById('db_log').textContent) + 1;
       document.getElementById('db_log').textContent = num;
     }
-  });
+  }, error, geoOptions);
 }
 
 

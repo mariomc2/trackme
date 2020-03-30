@@ -119,6 +119,8 @@ sendLocation = function(){
       lastLocation = position.coords;
       // Update counter in Page 
       console.log('Send location to DataBase for Run ' + run_id + ': ' + convertDMS(nav_lat, nav_lng));
+      const num = Number(document.getElementById('db_log').textContent) + 1;
+      document.getElementById('db_log').textContent = num;
     }
   });
 }
